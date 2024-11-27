@@ -6,10 +6,10 @@ app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 
 posts = [
     {
-        'author': 'Corey Schafer',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 20, 2018'
+        'author': 'Corey Schafer',      #作者姓名
+        'title': 'Blog Post 1',         #貼文標題
+        'content': 'First post content',#貼文內容
+        'date_posted': 'April 20, 2018' #貼文張貼時間
     },
     {
         'author': 'Jane Doe',

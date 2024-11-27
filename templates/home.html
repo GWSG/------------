@@ -1,15 +1,17 @@
-{% extends "layout.html" %}
-{% block content %}
-    {% for post in posts %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
+{% extends "layout.html" %}  <!-- 繼承 layout.html 樣板，重用主模板的結構和樣式 -->
+{% block content %}  <!-- 定義 content 區塊，將內容填充到 layout.html 的指定位置 -->
+
+    {% for post in posts %}  <!-- 循環遍歷 posts 列表，每個元素為一篇文章 post -->
+        <article class="media content-section">  <!-- 使用 Bootstrap 的 media 元件，表示一篇文章 -->
+          <div class="media-body">  <!-- 設定文章的主要內容 -->
+            <div class="article-metadata">  <!-- 文章的元數據區域，包括作者和發布日期 -->
+              <a class="mr-2" href="#">{{ post.author }}</a>  <!-- 顯示文章作者，未設置連結功能（使用 # 佔位） -->
+              <small class="text-muted">{{ post.date_posted }}</small>  <!-- 顯示文章的發布日期，樣式設為 text-muted -->
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
+            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>  <!-- 顯示文章標題，標題可作為連結 -->
+            <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容 -->
           </div>
         </article>
-    {% endfor %}
-{% endblock content %}
+    {% endfor %}  <!-- 結束 for 循環，處理完所有文章 -->
+    
+{% endblock content %}  <!-- 結束 content 區塊 -->
