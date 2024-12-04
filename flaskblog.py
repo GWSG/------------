@@ -1,8 +1,37 @@
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
 from forms import RegistrationForm, LoginForm
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+db = SQLAlchemy(app)
+
+class User(db.Model): #建立User使用者的資料庫,使用SQLAlchemy的物件,類別的關鍵字:class
+    id = db.Column(db.Integer, primary_key=True) 
+    # Integer:整數的意思,primary_key=True:負責主要欄位,意思是讓ID只能有唯一的且不能重複的整數數字
+
+    username = db.Column(db.String(20), unique =True, nullable=False) 
+    # 這一段的意思是使用者的名稱不能是相同的,然後nullable的flase的功能是不能是空白的,一定要輸入姓名
+
+    email = db.Column(db.String(120), unique =True, nullable=False)
+    # 
+
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    # 頭貼的部分,如果使用者沒有頭貼的話,預設就是用指定圖片
+
+    password = db.Column(db.String(60), nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+
+class Post(db.Model):
+       id = db.Column(db.Integer, primary_key=True)
+       title = db.Column(db.String(100), nullable=False)
+       date_posted = db.Column
+
 
 posts = [
     {
