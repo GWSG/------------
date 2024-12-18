@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+<!-- 繼承自 layout.html，填入內容到 content 區塊 -->
+{% block content %}
+    <div class="content-section">
+      <!-- 用戶資料的顯示部分 -->
+      <div class="media">
+        <!-- 用戶的圓形頭像 -->
+        <img class="rounded-circle account-img" src="{{ image_file }}">
+        <div class="media-body">
+          <!-- 用戶名 -->
+          <h2 class="account-heading">{{ current_user.username }}</h2>
+          <!-- 用戶電子郵件 -->
+          <p class="text-secondary">{{ current_user.email }}</p>
+        </div>
+      </div>
+      <!-- 帳戶資訊表單 -->
+        <form method="POST" action="" enctype="multipart/form-data">
+            <!-- 隱藏的 CSRF 保護標籤 -->
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Account Info</legend>
+                <!-- 用戶名輸入欄 -->
+                <div class="form-group">
+                    <!-- 顯示用戶名標籤 -->
+                    {{ form.username.label(class="form-control-label") }}
+                    <!-- 如果有驗證錯誤，顯示輸入框為無效狀態 -->
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        <!-- 顯示錯誤訊息 -->
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- 如果無錯誤，顯示正常的輸入框 -->
+                        {{ form.username(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <!-- 電子郵件輸入欄 -->
+                <div class="form-group">
+                    <!-- 顯示電子郵件標籤 -->
+                    {{ form.email.label(class="form-control-label") }}
+                    <!-- 如果有驗證錯誤，顯示輸入框為無效狀態 -->
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <!-- 顯示錯誤訊息 -->
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- 如果無錯誤，顯示正常的輸入框 -->
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <!-- 上傳圖片欄位 -->
+                <div class="form-group">
+                    <!-- 顯示圖片上傳標籤 -->
+                    {{ form.picture.label() }}
+                    <!-- 顯示圖片上傳輸入框 -->
+                    {{ form.picture(class="form-control-file") }}
+                    <!-- 如果有圖片上傳錯誤，顯示錯誤訊息 -->
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <!-- 表單提交按鈕 -->
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}

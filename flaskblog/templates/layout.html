@@ -1,64 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">  <!-- 定義網頁的編碼方式為 UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  <!-- 適配行動裝置的視窗設定 -->
+    <!-- 設定網頁的字符編碼為 UTF-8，確保正確顯示多語言文字 -->
+    <meta charset="utf-8">
+    <!-- 設定響應式網頁的視窗縮放屬性 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-          crossorigin="anonymous">  <!-- 引入 Bootstrap 4 的樣式表 -->
+    <!-- 引入 Bootstrap 的 CSS 文件，提供網頁樣式 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">  <!-- 引入自訂的 CSS 樣式表 -->
+    <!-- 引入自定義的 CSS 文件 -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
-    {% if title %}  <!-- 如果頁面有設定標題 -->
-        <title>Flask Blog - {{ title }}</title>  <!-- 顯示頁面標題 -->
-    {% else %}  <!-- 如果頁面沒有設定標題 -->
-        <title>Flask Blog</title>  <!-- 顯示預設標題 -->
+    <!-- 設定網頁標題，如果有傳入 title 變數則顯示動態標題，否則顯示預設標題 -->
+    {% if title %}
+        <title>Flask Blog - {{ title }}</title>
+    {% else %}
+        <title>Flask Blog</title>
     {% endif %}
 </head>
 <body>
+    <!-- 定義頁首內容 -->
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">  <!-- 設定固定在頂部的導航列 -->
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/">Flask Blog</a>  <!-- 網站標誌，點擊返回首頁 -->
+          <!-- 網站名稱，點擊後返回首頁 -->
+          <a class="navbar-brand mr-4" href="/">Flask Blog</a>
+          <!-- 手機或小螢幕的導航按鈕 -->
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>  <!-- 導航列在小螢幕時的切換按鈕 -->
+            <span class="navbar-toggler-icon"></span>
           </button>
+          <!-- 導航欄內容 -->
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>  <!-- 導航列的 Home 按鈕 -->
-              <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>  <!-- 導航列的 About 按鈕 -->
+              <!-- 導航到首頁 -->
+              <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a> <!-- 導航列的 Home 按鈕 -->
+              <!-- 導航到關於頁 -->
+              <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a> <!-- 導航列的 About 按鈕 -->
             </div>
-            <!-- Navbar Right Side -->
+            <!-- 導航欄右側，顯示不同的選項根據用戶是否已登入 -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>  <!-- 導航列的 Login 按鈕 -->
-              <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>  <!-- 導航列的 Register 按鈕 -->
+              {% if current_user.is_authenticated %} <!--只要是用{}包起來就是Jinja語法, 主要讓伺服器看的 -->
+                <!-- 如果用戶已登入，顯示帳戶與登出選項 -->
+                <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a> <!-- 導航列的 Account 按鈕 -->
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a> <!-- 導航列的 Logout 按鈕 -->
+              {% else %} <!--只要是用{}包起來就是Jinja語法, 主要讓伺服器看的 -->
+                <!-- 如果用戶未登入，顯示登入與註冊選項 -->
+                <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>  <!-- 導航列的 Login 按鈕 -->
+                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a> <!-- 導航列的 Register 按鈕 -->
+              {% endif %} <!--只要是用{}包起來就是Jinja語法, 主要讓伺服器看的 -->
             </div>
           </div>
         </div>
       </nav>
     </header>
+    <!-- 定義主內容 -->
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
-          {% with messages = get_flashed_messages(with_categories=true) %}  <!-- 取得所有使用 flash 傳遞的訊息 -->
-            {% if messages %}  <!-- 如果有訊息 -->
-              {% for category, message in messages %}  <!-- 逐一顯示每個訊息 -->
-                <div class="alert alert-{{ category }}">  <!-- 設定訊息的樣式根據類別（如 success, danger） -->
+          <!-- 顯示閃現訊息，如成功或錯誤訊息 -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
                   {{ message }}
                 </div>
               {% endfor %}
             {% endif %}
           {% endwith %}
-          {% block content %}{% endblock %}  <!-- 定義 content 區塊，供子模板覆蓋 -->
+          <!-- 填入模板內容 -->
+          {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
+          <!-- 側邊欄內容 -->
           <div class="content-section">
-            <h3>Our Sidebar</h3>  <!-- 側邊欄標題 -->
+            <h3>Our Sidebar</h3>
             <p class='text-muted'>You can put any information here you'd like.
-              <ul class="list-group">  <!-- 使用 Bootstrap 樣式的列表組 -->
+              <!-- 側邊欄的項目列表 -->
+              <ul class="list-group">
                 <li class="list-group-item list-group-item-light">Latest Posts</li>
                 <li class="list-group-item list-group-item-light">Announcements</li>
                 <li class="list-group-item list-group-item-light">Calendars</li>
@@ -70,16 +89,12 @@
       </div>
     </main>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
-            crossorigin="anonymous"></script>  <!-- 引入 jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
-            crossorigin="anonymous"></script>  <!-- 引入 Popper.js -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
-            crossorigin="anonymous"></script>  <!-- 引入 Bootstrap 的 JavaScript 功能 -->
+    <!-- 引入必要的 JavaScript 文件 -->
+    <!-- jQuery，先載入 -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- Popper.js，提供工具提示與下拉選單支援 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <!-- Bootstrap 的 JavaScript 文件 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
