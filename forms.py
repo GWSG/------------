@@ -26,6 +26,4 @@ class LoginForm(FlaskForm):  # 定義一個繼承自 FlaskForm 的登入表單
     # 定義密碼輸入欄位，驗證規則：必填
     remember = BooleanField('Remember Me')  # 定義一個布林選框，標籤為 'Remember Me'
     submit = SubmitField('Login')  # 定義提交按鈕，標籤為 'Login'
-    # uuigebhrngoifogl
-#jnlkrfjgekr
-#kmldfkinjlbdnfolgb
+
