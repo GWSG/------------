@@ -1,57 +1,13 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-posts = [
-    {
-        'author': 'Corey Schafer',      #作者姓名
-        'title': 'Blog Post 1',         #貼文標題
-        'content': 'First post content',#貼文內容
-        'date_posted': 'April 20, 2018' #貼文張貼時間
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 21, 2018'
-    },
-    {
-        'author': 'Henry ',
-        'title': 'Blog Post 3',
-        'content': 'Hello World',
-        'date_posted': 'November 20, 2024'
-    },
-    {
-        'author': 'Kai',
-        'title': 'Blog Post 4',
-        'content': 'HAHAHAHAHAHAHAHAHAHA',
-        'date_posted': 'November 27, 2024'
-    },
-    {
-        'author': 'Lao-Yang',
-        'title': 'Blog Post 5',
-        'content': 'OOOOOOOOOOOOOOOO',
-        'date_posted': 'December 11, 2024'
-    },
-    {
-        'author': 'Kyle',
-        'title': 'Blog Post 6',
-        'content': 'I am Kyle',
-        'date_posted': 'December 18, 2024'
-    },
-    {
-        'author': 'PiPP',
-        'title': 'Blog Post 7',
-        'content': 'User Account and Profile Picture',
-        'date_posted': 'December 25, 2024'
-    }
-]
 
 
 # 註冊一個路由，當訪問 "/" 或 "/home" 時，會執行以下函數
@@ -59,6 +15,8 @@ posts = [
 @app.route("/home")
 # 定義 home 函數，用來處理 "/" 和 "/home" 路徑的請求
 def home():
+    # 
+    posts = Post.query.all()
     # 回傳 home.html 的模板，並將變數 posts 傳遞給模板
     return render_template('home.html', posts=posts)
 
@@ -187,3 +145,53 @@ def account():
     # 返回 account.html 模板，並傳遞數據
     return render_template('account.html', title='Account', 
                            image_file=image_file, form=form)
+
+@app.route("/post/new", methods=['GET', 'POST'])  # 註冊路由，允許通過 GET 和 POST 方法訪問此路徑
+@login_required  # 確保只有已登入的用戶才能訪問此路由
+def new_post():  # 定義 new_post 函數，用於創建新文章
+    form = PostForm()  # 初始化表單，用於接受用戶的輸入
+    if form.validate_on_submit():  # 如果表單驗證通過（提交時所有欄位都有效）
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)  
+        # 創建一個新的文章對象，包含標題、內容和當前用戶作為作者
+        db.session.add(post)  # 將新文章添加到資料庫會話中
+        db.session.commit()  # 提交資料庫更改
+        flash('Your post has been created!', 'success')  # 顯示成功訊息
+        return redirect(url_for('home'))  # 重定向到主頁
+    return render_template('create_post.html', title='New Post', form=form, legend='New Post')  
+    # 渲染創建文章的模板，傳遞表單和標題到模板中
+
+@app.route("/post/<int:post_id>")  # 定義路由，帶有文章 ID 的參數
+def post(post_id):  # 定義函數，用於顯示特定文章
+    post = Post.query.get_or_404(post_id)  # 從資料庫查詢文章，如果不存在則返回 404 錯誤
+    return render_template('post.html', title=post.title, post=post)  
+    # 渲染單篇文章的模板，傳遞文章對象和標題
+
+@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])  # 定義更新文章的路由
+@login_required  # 確保只有已登入的用戶才能訪問此路由
+def update_post(post_id):  # 定義更新文章的函數
+    post = Post.query.get_or_404(post_id)  # 從資料庫查詢文章，確保文章存在
+    if post.author != current_user:  # 如果當前用戶不是文章的作者
+        abort(403)  # 返回 403 禁止訪問錯誤
+    form = PostForm()  # 初始化表單
+    if form.validate_on_submit():  # 如果表單驗證通過
+        post.title = form.title.data  # 更新文章標題
+        post.content = form.content.data  # 更新文章內容
+        db.session.commit()  # 提交資料庫更改
+        flash('Your post has been updated!', 'success')  # 顯示更新成功訊息
+        return redirect(url_for('post', post_id=post.id))  # 重定向到文章頁面
+    elif request.method == 'GET':  # 如果是 GET 方法，填充表單數據
+        form.title.data = post.title  # 將現有標題填入表單
+        form.content.data = post.content  # 將現有內容填入表單
+    return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')  
+    # 渲染模板，提供更新文章的功能
+
+@app.route("/post/<int:post_id>/delete", methods=['POST'])  # 定義刪除文章的路由，僅允許 POST 方法
+@login_required  # 確保只有已登入的用戶才能訪問此路由
+def delete_post(post_id):  # 定義刪除文章的函數
+    post = Post.query.get_or_404(post_id)  # 從資料庫查詢文章
+    if post.author != current_user:  # 如果當前用戶不是文章的作者
+        abort(403)  # 返回 403 禁止訪問錯誤
+    db.session.delete(post)  # 刪除文章
+    db.session.commit()  # 提交資料庫更改
+    flash('Your post has been deleted!', 'success')  # 顯示刪除成功訊息
+    return redirect(url_for('home'))  # 重定向到主頁

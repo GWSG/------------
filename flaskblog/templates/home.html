@@ -1,17 +1,19 @@
-{% extends "layout.html" %}  <!-- 繼承 layout.html 樣板，重用主模板的結構和樣式 -->
-{% block content %}  <!-- 定義 content 區塊，將內容填充到 layout.html 的指定位置 -->
+{% extends "layout.html" %}  <!-- 繼承 layout.html 模板，重用主框架結構和樣式 -->
+{% block content %}  <!-- 定義 content 區塊，填充具體內容 -->
+    {% for post in posts %}  <!-- 使用迴圈遍歷 posts 清單，渲染每篇文章 -->
+        <article class="media content-section">  <!-- 使用 Bootstrap 的 media 類設計文章區域 -->
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">  
+          <!-- 顯示作者的頭像，圖片路徑來自 static/profile_pics 資料夾 -->
 
-    {% for post in posts %}  <!-- 循環遍歷 posts 列表，每個元素為一篇文章 post -->
-        <article class="media content-section">  <!-- 使用 Bootstrap 的 media 元件，表示一篇文章 -->
-          <div class="media-body">  <!-- 設定文章的主要內容 -->
-            <div class="article-metadata">  <!-- 文章的元數據區域，包括作者和發布日期 -->
-              <a class="mr-2" href="#">{{ post.author }}</a>  <!-- 顯示文章作者，未設置連結功能（使用 # 佔位） -->
-              <small class="text-muted">{{ post.date_posted }}</small>  <!-- 顯示文章的發布日期，樣式設為 text-muted -->
+          <div class="media-body">  <!-- 文章內容主體 -->
+            <div class="article-metadata">  <!-- 顯示文章的元數據（作者和日期） -->
+              <a class="mr-2" href="#">{{ post.author.username }}</a>  <!-- 顯示文章作者的用戶名 -->
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>  <!-- 顯示文章發布日期，格式為 YYYY-MM-DD -->
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>  <!-- 顯示文章標題，標題可作為連結 -->
-            <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容 -->
+            <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>  
+            <!-- 顯示文章的標題，並將其設為鏈接，點擊跳轉到對應文章的詳細頁面 -->
+            <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容的簡要摘要 -->
           </div>
         </article>
-    {% endfor %}  <!-- 結束 for 循環，處理完所有文章 -->
-    
+    {% endfor %}  <!-- 結束文章迴圈 -->
 {% endblock content %}  <!-- 結束 content 區塊 -->

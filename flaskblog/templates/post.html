@@ -1,0 +1,45 @@
+{% extends "layout.html" %}  <!-- 繼承 layout.html 模板，重用主框架結構和樣式 -->
+{% block content %}  <!-- 定義 content 區塊，填充具體內容 -->
+
+  <article class="media content-section">  <!-- 使用 media 類來顯示文章內容 -->
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">  <!-- 顯示作者的頭像，使用 URL 來定位圖片位置 -->
+    
+    <div class="media-body">  <!-- 文章內容區塊 -->
+      <div class="article-metadata">  <!-- 文章的元數據，包括作者和發布日期 -->
+        <a class="mr-2" href="#">{{ post.author.username }}</a>  <!-- 顯示作者的用戶名 -->
+        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>  <!-- 顯示文章的發布日期，格式化為 'YYYY-MM-DD' -->
+        
+        {% if post.author == current_user %}  <!-- 如果當前用戶是文章的作者，顯示更新和刪除按鈕 -->
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>  <!-- 更新文章的鏈接 -->
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>  <!-- 顯示刪除按鈕，觸發刪除確認模態框 -->
+          </div>
+        {% endif %}  <!-- 結束條件判斷 -->
+      </div>
+      
+      <h2 class="article-title">{{ post.title }}</h2>  <!-- 顯示文章標題 -->
+      <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容 -->
+    </div>
+  </article>
+
+  <!-- 刪除確認模態框 -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Post?</h5>  <!-- 顯示刪除確認標題 -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>  <!-- 關閉按鈕 -->
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>  <!-- 關閉模態框按鈕 -->
+          <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">  <!-- 刪除文章的表單，通過 POST 請求刪除文章 -->
+            <input class="btn btn-danger" type="submit" value="Delete">  <!-- 確認刪除按鈕 -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}  <!-- 結束 content 區塊 -->

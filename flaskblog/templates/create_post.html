@@ -1,0 +1,46 @@
+{% extends "layout.html" %}  <!-- 繼承 layout.html 模板，重用主框架結構和樣式 -->
+{% block content %}  <!-- 定義 content 區塊，填充具體內容 -->
+<div class="content-section">  <!-- 使用 Bootstrap 提供的樣式設計內容區域 -->
+    <form method="POST" action="">  <!-- 表單使用 POST 方法提交，action 留空表示提交到當前頁面 -->
+        {{ form.hidden_tag() }}  <!-- 隱藏 CSRF 防護標籤，用於防範跨站請求偽造攻擊 -->
+        <fieldset class="form-group">  <!-- 定義表單欄位組，添加邊框和標題 -->
+            <legend class="border-bottom mb-4">{{ legend }}</legend>  <!-- 顯示表單標題，根據變數 {{ legend }} 設定 -->
+
+            <!-- 標題輸入欄 -->
+            <div class="form-group">
+                {{ form.title.label(class="form-control-label") }}  <!-- 顯示標題欄位的標籤 -->
+                {% if form.title.errors %}  <!-- 如果標題欄位有錯誤 -->
+                    {{ form.title(class="form-control form-control-lg is-invalid") }}  <!-- 顯示錯誤樣式的輸入框 -->
+                    <div class="invalid-feedback">  <!-- 顯示錯誤訊息 -->
+                        {% for error in form.title.errors %}  <!-- 循環顯示所有錯誤 -->
+                            <span>{{ error }}</span>  <!-- 單個錯誤訊息 -->
+                        {% endfor %}
+                    </div>
+                {% else %}  <!-- 如果沒有錯誤 -->
+                    {{ form.title(class="form-control form-control-lg") }}  <!-- 顯示正常樣式的輸入框 -->
+                {% endif %}
+            </div>
+
+            <!-- 內容輸入欄 -->
+            <div class="form-group">
+                {{ form.content.label(class="form-control-label") }}  <!-- 顯示內容欄位的標籤 -->
+                {% if form.content.errors %}  <!-- 如果內容欄位有錯誤 -->
+                    {{ form.content(class="form-control form-control-lg is-invalid") }}  <!-- 顯示錯誤樣式的輸入框 -->
+                    <div class="invalid-feedback">  <!-- 顯示錯誤訊息 -->
+                        {% for error in form.content.errors %}  <!-- 循環顯示所有錯誤 -->
+                            <span>{{ error }}</span>  <!-- 單個錯誤訊息 -->
+                        {% endfor %}
+                    </div>
+                {% else %}  <!-- 如果沒有錯誤 -->
+                    {{ form.content(class="form-control form-control-lg") }}  <!-- 顯示正常樣式的輸入框 -->
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <!-- 提交按鈕 -->
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}  <!-- 顯示提交按鈕，樣式為 "outline-info" -->
+        </div>
+    </form>
+</div>
+{% endblock content %}  <!-- 結束 content 區塊 -->

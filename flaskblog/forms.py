@@ -5,7 +5,7 @@ from flask_wtf.file import FileField, FileAllowed
 # 從 flask_login 模組中導入 current_user，用於獲取當前登入的用戶
 from flask_login import current_user
 # 從 wtforms 模組中導入表單欄位類別
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 # 從 wtforms.validators 模組中導入表單驗證器
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 # 從 flaskblog.models 模組中導入 User 模型，用於查詢資料庫
@@ -84,3 +84,17 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 # 如果電子郵件已存在，拋出驗證錯誤
                 raise ValidationError('That email is taken. Please choose a different one.')
+            
+
+class PostForm(FlaskForm):  # 繼承 FlaskForm，表示這是一個表單類
+    title = StringField('Title', validators=[DataRequired()])  
+    # 定義一個標題欄位（輸入框類型），標籤為 'Title'
+    # 使用 `DataRequired()` 驗證器確保此欄位為必填
+
+    content = TextAreaField('Content', validators=[DataRequired()])  
+    # 定義一個內容欄位（多行文字輸入框），標籤為 'Content'
+    # 使用 `DataRequired()` 驗證器確保此欄位為必填
+
+    submit = SubmitField('Post')  
+    # 定義一個提交按鈕，標籤為 'Post'
+
