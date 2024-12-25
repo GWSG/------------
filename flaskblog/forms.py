@@ -14,18 +14,14 @@ from flaskblog.models import User
 
 # 註冊表單類別
 class RegistrationForm(FlaskForm):  # 定義一個繼承自 FlaskForm 的註冊表單
-    username = StringField('Username',  # 定義一個字串輸入欄位，標籤為 'Username'
-                           validators=[DataRequired(), Length(min=2, max=20)])  
-                           # 驗證規則：必填，長度需在 2 到 20 字元之間
-    email = StringField('Email',  # 定義一個字串輸入欄位，標籤為 'Email'
-                        validators=[DataRequired(), Email()])  
-                        # 驗證規則：必填，且需符合 Email 格式
-    password = PasswordField('Password', validators=[DataRequired()])  
-    # 定義密碼輸入欄位，驗證規則：必填
-    confirm_password = PasswordField('Confirm Password',  
-                                     validators=[DataRequired(), EqualTo('password')])  
-                                     # 確認密碼輸入欄位，驗證規則：必填，需與密碼欄位相等
-    submit = SubmitField('Sign Up')  # 定義提交按鈕，標籤為 'Sign Up'
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Sign Up')
 
     # 定義用戶名驗證方法，檢查用戶名是否已存在於資料庫
     def validate_username(self, username):

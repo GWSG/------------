@@ -44,6 +44,12 @@ posts = [
         'title': 'Blog Post 6',
         'content': 'I am Kyle',
         'date_posted': 'December 18, 2024'
+    },
+    {
+        'author': 'PiPP',
+        'title': 'Blog Post 7',
+        'content': 'User Account and Profile Picture',
+        'date_posted': 'December 25, 2024'
     }
 ]
 
@@ -179,4 +185,5 @@ def account():
     # 設定用戶的圖片文件路徑
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     # 返回 account.html 模板，並傳遞數據
-    return render_template('account.html', title='Account', image_file=image_file, form=form)
+    return render_template('account.html', title='Account', 
+                           image_file=image_file, form=form)
