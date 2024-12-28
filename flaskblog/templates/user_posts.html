@@ -1,0 +1,36 @@
+{% extends "layout.html" %}  <!-- 繼承 layout.html 主模板 -->
+{% block content %}  <!-- 定義填充到主模板的內容區塊 -->
+    <h1 class="mb-3">Posts by {{ user.username }} ({{ posts.total }})</h1>  <!-- 顯示用戶名及其文章總數 -->
+    {% for post in posts.items %}  <!-- 遍歷分頁結果中的每篇文章 -->
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}"> 
+          <!-- 顯示作者的頭像 -->
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
+              <!-- 顯示文章作者的用戶名，並鏈接到其文章列表 -->
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+              <!-- 顯示文章發布日期 -->
+            </div>
+            <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+            <!-- 顯示文章標題，並鏈接到文章詳細頁面 -->
+            <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容 -->
+          </div>
+        </article>
+    {% endfor %}  <!-- 結束文章的遍歷 -->
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      <!-- 遍歷所有分頁號，確定顯示範圍 -->
+      {% if page_num %}
+        {% if posts.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+          <!-- 如果是當前頁，顯示為主題按鈕 -->
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
+          <!-- 如果不是當前頁，顯示為次要按鈕 -->
+        {% endif %}
+      {% else %}
+        ...
+        <!-- 如果頁碼範圍內有間隔，用省略號表示 -->
+      {% endif %}
+    {% endfor %}  <!-- 結束分頁號的遍歷 -->
+{% endblock content %}  <!-- 結束內容區塊 -->

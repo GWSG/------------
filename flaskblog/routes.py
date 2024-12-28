@@ -15,10 +15,10 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/home")
 # 定義 home 函數，用來處理 "/" 和 "/home" 路徑的請求
 def home():
-    # 
-    posts = Post.query.all()
-    # 回傳 home.html 的模板，並將變數 posts 傳遞給模板
-    return render_template('home.html', posts=posts)
+    page = request.args.get('page', 1, type=int) # 從查詢參數中獲取當前頁數，默認為 1，並轉換為整數
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=2) # 查詢所有文章，按發佈日期降序排列，並進行分頁，每頁顯示 2 篇文章
+    return render_template('home.html', posts=posts) #返回經過處理的 home.html，並傳遞文章列表到模板中
+
 
 # 註冊一個路由，當訪問 "/about" 時，會執行以下函數
 @app.route("/about")
@@ -195,3 +195,12 @@ def delete_post(post_id):  # 定義刪除文章的函數
     db.session.commit()  # 提交資料庫更改
     flash('Your post has been deleted!', 'success')  # 顯示刪除成功訊息
     return redirect(url_for('home'))  # 重定向到主頁
+
+@app.route("/user/<string:username>") # 定義路由，當訪問 /user/<username> 時，執行此函數
+def user_posts(username): # 接收動態 URL 中的用戶名參數
+    page = request.args.get('page', 1, type=int) # 從查詢參數中獲取當前頁數，默認為 1，轉換為整數
+    user = User.query.filter_by(username=username).first_or_404() # 按發佈日期降序排列,查找該用戶發表的所有文章,按發佈日期降序排列
+    posts = Post.query.filter_by(author=user)\
+        .order_by(Post.date_posted.desc())\
+        .paginate(page=page, per_page=4) # 對結果進行分頁，每頁顯示 4 篇文章
+    return render_template('user_posts.html', posts=posts, user=user) # 返回經過處理的 user_posts.html，傳遞文章和用戶信息
