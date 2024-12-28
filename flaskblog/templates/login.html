@@ -1,52 +1,52 @@
-{% extends "layout.html" %}  <!-- 繼承 layout.html 模板，重用主框架結構和樣式 -->
-{% block content %}  <!-- 定義 content 區塊，填充頁面的具體內容 -->
-    <div class="content-section">  <!-- 使用 Bootstrap 提供的樣式設計表單區域 -->
-        <form method="POST" action="">  <!-- 表單使用 POST 方法提交，action 留空表示提交到當前頁面 -->
-            {{ form.hidden_tag() }}  <!-- 隱藏 CSRF 防護標籤，用於保護跨站請求偽造攻擊 -->
-            <fieldset class="form-group">  <!-- 群組表單欄位，加入邊框和標題 -->
-                <legend class="border-bottom mb-4">Log In</legend>  <!-- 表單標題，顯示 "Log In" -->
-                <div class="form-group">  <!-- 用於輸入電子郵件 -->
-                    {{ form.email.label(class="form-control-label") }}  <!-- 顯示電子郵件標籤 -->
-                    {% if form.email.errors %}  <!-- 如果電子郵件欄位有錯誤 -->
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}  <!-- 顯示錯誤樣式的輸入框 -->
-                        <div class="invalid-feedback">  <!-- 顯示錯誤訊息 -->
-                            {% for error in form.email.errors %}  <!-- 循環顯示所有錯誤 -->
-                                <span>{{ error }}</span>  <!-- 單個錯誤訊息 -->
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log In</legend>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
                             {% endfor %}
                         </div>
-                    {% else %}  <!-- 如果沒有錯誤 -->
-                        {{ form.email(class="form-control form-control-lg") }}  <!-- 顯示正常樣式的輸入框 -->
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">  <!-- 用於輸入密碼 -->
-                    {{ form.password.label(class="form-control-label") }}  <!-- 顯示密碼標籤 -->
-                    {% if form.password.errors %}  <!-- 如果密碼欄位有錯誤 -->
-                        {{ form.password(class="form-control form-control-lg is-invalid") }}  <!-- 顯示錯誤樣式的輸入框 -->
-                        <div class="invalid-feedback">  <!-- 顯示錯誤訊息 -->
-                            {% for error in form.password.errors %}  <!-- 循環顯示所有錯誤 -->
-                                <span>{{ error }}</span>  <!-- 單個錯誤訊息 -->
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
                             {% endfor %}
                         </div>
-                    {% else %}  <!-- 如果沒有錯誤 -->
-                        {{ form.password(class="form-control form-control-lg") }}  <!-- 顯示正常樣式的輸入框 -->
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-check">  <!-- 記住我選框 -->
-                    {{ form.remember(class="form-check-input") }}  <!-- 顯示布林選框 -->
-                    {{ form.remember.label(class="form-check-label") }}  <!-- 顯示選框標籤 -->
+                <div class="form-check">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label") }}
                 </div>
             </fieldset>
-            <div class="form-group">  <!-- 提交表單 -->
-                {{ form.submit(class="btn btn-outline-info") }}  <!-- 顯示提交按鈕 -->
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <small class="text-muted ml-2">
+                    <a href="{{ url_for('reset_request') }}">Forgot Password?</a>
+                </small>
             </div>
-            <small class="text-muted ml-2">  <!-- 顯示密碼忘記連結 -->
-                <a href="#">Forgot Password?</a>  <!-- 點擊可跳轉至忘記密碼頁面 -->
-            </small>
         </form>
     </div>
-    <div class="border-top pt-3">  <!-- 分隔線和註冊提示 -->
+    <div class="border-top pt-3">
         <small class="text-muted">
-            Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>  <!-- 註冊新賬號的連結 -->
+            Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
         </small>
     </div>
-{% endblock content %}  <!-- 結束 content 區塊 -->
+{% endblock content %}
