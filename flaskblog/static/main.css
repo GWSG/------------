@@ -1,80 +1,94 @@
 body {
-  background: #fafafa;
-  color: #333333;
+  background: #1a1a2e; /* 深藍黑色背景，營造科幻感 */
+  color: #eaeaea; /* 淺灰色字體，對比明顯 */
+  font-family: 'Orbitron', sans-serif; /* 使用科技感的字體 */
   margin-top: 5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #444444;
+  color: #00d4ff; /* 亮藍色標題文字，突出未來主題 */
 }
 
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #162447; /* 深藍色背景，用於區域塊 */
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+  color: #eaeaea; /* 淺灰色字體，用於導航連結 */
+  font-family: 'Orbitron', sans-serif; /* 保持科技感字體 */
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
+  color: #00d4ff; /* 懸停時顯示亮藍色 */
 }
 
 .site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
+  font-weight: bold; /* 高亮當前頁面連結 */
+  color: #ff6f61; /* 鮮紅色，增添動感 */
 }
 
 .content-section {
-  background: #ffffff;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
+  background: #0f3460; /* 深藍色區塊背景 */
+  padding: 15px 25px;
+  border: 2px solid #00d4ff; /* 亮藍色邊框 */
+  border-radius: 10px;
   margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); /* 營造發光效果的陰影 */
 }
 
 .article-title {
-  color: #444444;
+  color: #00d4ff; /* 亮藍色標題文字 */
 }
 
 a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
+  color: #ff6f61; /* 懸停時顯示鮮紅色 */
+  text-decoration: none; /* 去除底線，保持簡潔 */
 }
 
 .article-content {
   white-space: pre-line;
+  font-family: 'Roboto', sans-serif; /* 現代感字體，用於正文 */
+  color: #eaeaea; /* 淺灰色文字 */
 }
 
 .article-img {
-  height: 65px;
-  width: 65px;
+  height: 75px;
+  width: 75px;
   margin-right: 16px;
+  border: 2px solid #00d4ff; /* 亮藍色邊框，突出科幻感 */
+  border-radius: 10%; /* 柔和的矩形圖片效果 */
 }
 
 .article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+  border-bottom: 2px dotted #00d4ff; /* 使用點狀邊框，增添未來感 */
 }
 
 .article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
+  color: #ff6f61; /* 懸停時顯示鮮紅色文字 */
+  text-decoration: underline; /* 添加底線，提升互動感 */
 }
 
 .article-svg {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   vertical-align: middle;
+  fill: #00d4ff; /* 科技感亮藍色 */
 }
 
 .account-img {
-  height: 125px;
-  width: 125px;
+  height: 150px;
+  width: 150px;
   margin-right: 20px;
   margin-bottom: 16px;
+  border: 3px solid #ff6f61; /* 鮮紅色邊框，突出頭像 */
+  border-radius: 50%; /* 圓形圖片，增加科技感 */
+  box-shadow: 0 0 10px #ff6f61; /* 營造發光效果 */
 }
 
 .account-heading {
   font-size: 2.5rem;
+  font-family: 'Orbitron', sans-serif; /* 保持主題字體一致 */
+  color: #00d4ff; /* 亮藍色文字 */
 }

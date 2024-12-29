@@ -1,4 +1,15 @@
 {% extends "layout.html" %}  <!-- 繼承 layout.html 樣板，重用主模板的結構和樣式 -->
+
 {% block content %}  <!-- 定義 content 區塊，用於填充 layout.html 的指定位置 -->
-    <h1>About Page</h1>  <!-- 顯示 "About Page" 作為頁面的主標題 -->
+    <div class="content-section text-center">  <!-- 中心對齊的內容區域 -->
+        <h1>關於我</h1>  <!-- 顯示 "About Me" 作為主標題 -->
+        <img class="account-img rounded-circle" src="{{ url_for('static', filename='profile_pics/default2.png') }}" alt="Profile Picture">
+        <!-- 顯示默認用戶圖片 -->
+        <p class="mt-4">
+            歡迎來到我的個人部落格我是許皓詠，只是一位讀資工系，能力很普通的五專學生。在這個平台上，我希望我寫程式和硬體的能力都能向上提升，並記錄我的成長過程在我的這個部落格上面。
+        </p>
+        <p>
+            除了寫程式和摸硬體以外，我也喜歡在休閒的時候看電影。歡迎瀏覽網站中的文章與頁面，期待能在這裡與其他人互動交流！
+        </p>
+    </div>
 {% endblock content %}  <!-- 結束 content 區塊 -->

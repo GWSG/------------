@@ -1,27 +1,27 @@
-{% extends "layout.html" %}
-{% block content %}
-    <div class="content-section">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Reset Password</legend>
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
+{% extends "layout.html" %}  <!-- 繼承 layout.html 模板，重用主框架結構和樣式 -->
+{% block content %}  <!-- 定義 content 區塊，將具體內容填充到 layout.html 中的指定位置 -->
+    <div class="content-section">  <!-- 定義主要內容區域，使用 Bootstrap 的樣式 -->
+        <form method="POST" action="">  <!-- 定義表單，使用 POST 方法提交，action 留空表示提交到當前頁面 -->
+            {{ form.hidden_tag() }}  <!-- 隱藏 CSRF 防護標籤，用於防範跨站請求偽造攻擊 -->
+            <fieldset class="form-group">  <!-- 定義表單欄位組，添加邊框和標題 -->
+                <legend class="border-bottom mb-4">Reset Password</legend>  <!-- 定義表單的標題 -->
+                <div class="form-group">  <!-- 定義電子郵件輸入欄 -->
+                    {{ form.email.label(class="form-control-label") }}  <!-- 顯示電子郵件欄位的標籤 -->
+                    {% if form.email.errors %}  <!-- 如果電子郵件欄位有錯誤 -->
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}  <!-- 顯示錯誤樣式的輸入框 -->
+                        <div class="invalid-feedback">  <!-- 顯示錯誤訊息 -->
+                            {% for error in form.email.errors %}  <!-- 循環顯示所有錯誤 -->
+                                <span>{{ error }}</span>  <!-- 顯示單個錯誤訊息 -->
                             {% endfor %}
                         </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
+                    {% else %}  <!-- 如果電子郵件欄位沒有錯誤 -->
+                        {{ form.email(class="form-control form-control-lg") }}  <!-- 顯示正常樣式的輸入框 -->
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+            <div class="form-group">  <!-- 定義提交按鈕 -->
+                {{ form.submit(class="btn btn-outline-info") }}  <!-- 顯示提交按鈕，樣式為 "outline-info" -->
             </div>
         </form>
     </div>
-{% endblock content %}
+{% endblock content %}  <!-- 結束 content 區塊 -->

@@ -1,36 +1,37 @@
-{% extends "layout.html" %}  <!-- 繼承 layout.html 主模板 -->
-{% block content %}  <!-- 定義填充到主模板的內容區塊 -->
-    <h1 class="mb-3">Posts by {{ user.username }} ({{ posts.total }})</h1>  <!-- 顯示用戶名及其文章總數 -->
+{% extends "layout.html" %}  <!-- 繼承 layout.html 模板，重用主框架結構和樣式 -->
+{% block content %}  <!-- 定義 content 區塊，將具體內容填充到 layout.html 中的指定位置 -->
+    <h1 class="mb-3">Posts by {{ user.username }} ({{ posts.total }})</h1>  
+    <!-- 顯示標題，包含用戶名和該用戶的文章總數 -->
     {% for post in posts.items %}  <!-- 遍歷分頁結果中的每篇文章 -->
-        <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}"> 
-          <!-- 顯示作者的頭像 -->
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
-              <!-- 顯示文章作者的用戶名，並鏈接到其文章列表 -->
-              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-              <!-- 顯示文章發布日期 -->
+        <article class="media content-section">  <!-- 定義文章的結構 -->
+          <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">  
+          <!-- 顯示作者的頭像，從靜態資源文件夾中加載圖片，並設置為圓形 -->
+          <div class="media-body">  <!-- 文章內容區域 -->
+            <div class="article-metadata">  <!-- 文章的元數據，包括作者和發布日期 -->
+              <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>  
+              <!-- 顯示文章作者的用戶名，並設置鏈接到該作者的所有文章頁面 -->
+              <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>  
+              <!-- 顯示文章的發布日期，格式化為 'YYYY-MM-DD' -->
             </div>
-            <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
-            <!-- 顯示文章標題，並鏈接到文章詳細頁面 -->
-            <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容 -->
+            <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>  
+            <!-- 顯示文章標題，並設置鏈接到文章的詳細頁面 -->
+            <p class="article-content">{{ post.content }}</p>  <!-- 顯示文章內容摘要 -->
           </div>
         </article>
     {% endfor %}  <!-- 結束文章的遍歷 -->
-    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-      <!-- 遍歷所有分頁號，確定顯示範圍 -->
-      {% if page_num %}
-        {% if posts.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
-          <!-- 如果是當前頁，顯示為主題按鈕 -->
-        {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>
-          <!-- 如果不是當前頁，顯示為次要按鈕 -->
+    
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}  
+    <!-- 遍歷所有分頁號，設置顯示範圍 -->
+      {% if page_num %}  <!-- 如果頁碼有效 -->
+        {% if posts.page == page_num %}  <!-- 如果是當前頁 -->
+          <a class="btn btn-info mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>  
+          <!-- 當前頁顯示為主題按鈕 -->
+        {% else %}  <!-- 如果不是當前頁 -->
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('user_posts', username=user.username, page=page_num) }}">{{ page_num }}</a>  
+          <!-- 其他頁顯示為次要按鈕 -->
         {% endif %}
-      {% else %}
-        ...
-        <!-- 如果頁碼範圍內有間隔，用省略號表示 -->
+      {% else %}  
+        ...  <!-- 如果頁碼範圍內有間隔，用省略號表示 -->
       {% endif %}
     {% endfor %}  <!-- 結束分頁號的遍歷 -->
-{% endblock content %}  <!-- 結束內容區塊 -->
+{% endblock content %}  <!-- 結束 content 區塊 -->
